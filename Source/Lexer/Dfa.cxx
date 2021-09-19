@@ -4,6 +4,7 @@
 
 std::shared_ptr<DfaNode> ComputeEpsilonClosure(NfaNodeSet nodes);
 NfaNodeSet ComputeMoveClosure(NfaNodeSet inputs, char c);
+bool AlreadyInDfa(const DfaNodeSet& dfa, const std::shared_ptr<DfaNode>& node);
 
 std::shared_ptr<DfaNode> FindUnmarked(DfaNodeSet dfa)
 {
@@ -16,7 +17,6 @@ std::shared_ptr<DfaNode> FindUnmarked(DfaNodeSet dfa)
 	}
 	return nullptr;
 }
-bool AlreadyInDfa(const DfaNodeSet& dfa, const std::shared_ptr<DfaNode>& node);
 
 Dfa DfaFromNfa(const Nfa& nfa)
 {
