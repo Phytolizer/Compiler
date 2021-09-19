@@ -1,0 +1,8 @@
+---
+Language: Cpp
+BasedOnStyle: Microsoft
+PointerAlignment: Left
+UseTab: ForIndentation
+BinPackArguments: false
+BinPackParameters: false
+AlignAfterOpenBracket: AlwaysBreak
