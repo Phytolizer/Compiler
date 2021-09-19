@@ -2,10 +2,10 @@
 #include <limits>
 #include <stack>
 
-std::shared_ptr<DfaNode> ComputeEpsilonClosure(std::unordered_set<std::shared_ptr<NfaNode>> nodes);
-std::unordered_set<std::shared_ptr<NfaNode>> ComputeMoveClosure(
-    std::unordered_set<std::shared_ptr<NfaNode>> inputs, char c);
-std::shared_ptr<DfaNode> FindUnmarked(std::unordered_set<std::shared_ptr<DfaNode>> dfa)
+std::shared_ptr<DfaNode> ComputeEpsilonClosure(NfaNodeSet nodes);
+NfaNodeSet ComputeMoveClosure(NfaNodeSet inputs, char c);
+
+std::shared_ptr<DfaNode> FindUnmarked(DfaNodeSet dfa)
 {
 	for (auto& node : dfa)
 	{
@@ -16,11 +16,11 @@ std::shared_ptr<DfaNode> FindUnmarked(std::unordered_set<std::shared_ptr<DfaNode
 	}
 	return nullptr;
 }
-bool AlreadyInDfa(const std::unordered_set<std::shared_ptr<DfaNode>>& dfa, const std::shared_ptr<DfaNode>& node);
+bool AlreadyInDfa(const DfaNodeSet& dfa, const std::shared_ptr<DfaNode>& node);
 
 Dfa DfaFromNfa(const Nfa& nfa)
 {
-	std::unordered_set<std::shared_ptr<DfaNode>> DfaStates;
+	DfaNodeSet DfaStates;
 	DfaStates.emplace(ComputeEpsilonClosure({nfa.StartState}));
 	std::shared_ptr<DfaNode> Current;
 	while ((Current = FindUnmarked(DfaStates)))
@@ -47,7 +47,7 @@ Dfa DfaFromNfa(const Nfa& nfa)
 	return {DfaStates};
 }
 
-std::shared_ptr<DfaNode> ComputeEpsilonClosure(std::unordered_set<std::shared_ptr<NfaNode>> nodes)
+std::shared_ptr<DfaNode> ComputeEpsilonClosure(NfaNodeSet nodes)
 {
 	auto result = std::make_shared<DfaNode>();
 	std::stack<std::shared_ptr<NfaNode>> WorkingStack;
@@ -79,10 +79,9 @@ std::shared_ptr<DfaNode> ComputeEpsilonClosure(std::unordered_set<std::shared_pt
 	return result;
 }
 
-std::unordered_set<std::shared_ptr<NfaNode>> ComputeMoveClosure(
-    std::unordered_set<std::shared_ptr<NfaNode>> inputs, char c)
+NfaNodeSet ComputeMoveClosure(NfaNodeSet inputs, char c)
 {
-	std::unordered_set<std::shared_ptr<NfaNode>> outset;
+	NfaNodeSet outset;
 	for (auto& node : inputs)
 	{
 		if (node->EdgeType == NfaEdgeType::CharacterClass && node->Edge.contains(c))
@@ -93,7 +92,7 @@ std::unordered_set<std::shared_ptr<NfaNode>> ComputeMoveClosure(
 	return outset;
 }
 
-bool AlreadyInDfa(const std::unordered_set<std::shared_ptr<DfaNode>>& dfa, const std::shared_ptr<DfaNode>& node)
+bool AlreadyInDfa(const DfaNodeSet& dfa, const std::shared_ptr<DfaNode>& node)
 {
 	return std::find_if(dfa.begin(), dfa.end(), [&node](const std::shared_ptr<DfaNode>& n) {
 		       return n->Identifier == node->Identifier;

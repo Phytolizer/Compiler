@@ -8,18 +8,22 @@
 #include <unordered_map>
 #include <unordered_set>
 
+using NfaNodeSet = std::unordered_set<std::shared_ptr<NfaNode>>;
+
 struct DfaNode
 {
-    std::unordered_set<std::shared_ptr<NfaNode>> Identifier;
+    NfaNodeSet Identifier;
     bool Mark = false;
 	std::unordered_map<char, std::shared_ptr<DfaNode>> Next;
 	bool IsAccepting;
 	std::string AcceptString;
 };
 
+using DfaNodeSet = std::unordered_set<std::shared_ptr<DfaNode>>;
+
 struct Dfa
 {
-    std::unordered_set<std::shared_ptr<DfaNode>> States;
+    DfaNodeSet States;
 };
 
 Dfa DfaFromNfa(const Nfa& nfa);
