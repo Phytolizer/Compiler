@@ -327,7 +327,7 @@ NfaParseState::CanStartExpressionResult NfaParseState::CanStartExpression(TokenC
 
 void NfaParseState::Advance()
 {
-	if (Input == OriginalInput.end())
+	if (Input == OriginalInput.end() || std::isspace(*Input))
 	{
 		CurrentToken = TokenClass::EndOfInput;
 		CurrentLexeme = '\0';

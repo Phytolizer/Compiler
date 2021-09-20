@@ -10,5 +10,6 @@ int main()
 	{
 		Nfa test = NfaFromRegex(line);
 		Dfa testDfa = DfaFromNfa(test);
+		std::cout << "DFA constructed\n";
 	}
 }

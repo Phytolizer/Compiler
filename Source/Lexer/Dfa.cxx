@@ -50,6 +50,7 @@ Dfa DfaFromNfa(const Nfa& nfa)
 std::shared_ptr<DfaNode> ComputeEpsilonClosure(NfaNodeSet nodes)
 {
 	auto result = std::make_shared<DfaNode>();
+	result->Mark = false;
 	std::stack<std::shared_ptr<NfaNode>> WorkingStack;
 	for (auto& node : nodes)
 	{
